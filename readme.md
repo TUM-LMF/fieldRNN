@@ -58,10 +58,9 @@ $ python train.py --help
 > batchsize             batchsize
 ```
 
-For Instance:
+For instance:
 ```
-python train.py 4 2 0.5 0 30 500 --gpu 1 \
-  --model lstm --savedir save --datadir data;
+python train.py 4 2 0.5 0 30 500 --gpu 1 --model lstm --savedir save --datadir data;
 ```
 tensorflow checkpoint and eventfiles of this call will be stored at ```save/lstm/4l2r50d0f```
 
@@ -78,7 +77,7 @@ These files are later used for calculation of accuracy metrics by ```cvprwsevalu
 ## Support Vector Machine baseline
 Support Vector Machine for baseline evaluation is based on [scikit-learn](http://scikit-learn.org/stable/) framework
 
-The script ```svm.py``` performes a gridsearch.
+The script ```svm.py``` performes the gridsearch.
 The generated files ```svm/scores.npy```, ```svm/targets.npy```,  ```svm/predicted.npy``` are needed for ```cvprwsevaluation.ipynb```
 
 ## Earthvision 2017 Evaluation
