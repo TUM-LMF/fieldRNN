@@ -2,13 +2,12 @@
 
 ##### Source code of Rußwurm & Körner (2017) at [EARTHVISION 2017](https://www.grss-ieee.org/earthvision2017/)
 
-When you use this source please consider citing
+When you use this code please cite
 ```
-Rußwurm, M., and M. Körner. (2017) "Temporal Vegetation Modelling using Long Short-Term Memory Networks
-for Crop Identification from Medium-Resolution Multi-Spectral Satellite Images" In Proceedings of the
-IEEE Conference on Computer Vision and Pattern Recognition Workshops, Honolulu, HI, USA, 21 Juli 2017.
+Rußwurm M., Körner M. (2017). Temporal Vegetation Modelling using Long Short-Term Memory Networks
+for Crop Identification from Medium-Resolution Multi-Spectral Satellite Images. In Proceedings of the
+IEEE Conference on Computer Vision and Pattern Recognition (CVPR) Workshops, 2017.
 ```
-
 
 #### Tensorflow Graphs
 The TensorFlow graphs for recurrent and convolutional networks are defined at ```rnn_model.py``` and ```cnn_model.py```.
@@ -18,6 +17,7 @@ The TensorFlow graphs for recurrent and convolutional networks are defined at ``
 **Please Note**: The data of this project is stored in local PostGIS Database which
 the provided scripts are accessing.
 Hence currently the ```train``` and ```evaluation``` scripts are not executable, due to database restrictions.
+However the training and evalutation will be published shortly.
 
 ##### Requirements
 
@@ -29,12 +29,12 @@ Hence currently the ```train``` and ```evaluation``` scripts are not executable,
 A complete package list at ```requirements.txt```
 
 <div class="alert alert-warning">
-Due to changes in the tf.nn.rnn_cell.MultiRNN class in TF 1.2.0 the current code is not compatible with Tensorflow 1.2.0
+Due to changes in the tf.nn.rnn_cell.MultiRNN class in Tensorflow 1.2.0 the current code is not compatible with TF version 1.2.0
 </div>
 
 ##### Clone this repository
 ```
-git clone https://github.com/MarcCoru/fieldRNN.git
+git clone https://github.com/TUM-LMF/fieldRNN.git
 ```
 
 <!--
@@ -45,7 +45,7 @@ wget LoremIpsum
 -->
 
 #### Network Training
-The training is performed on *train* data, either from the database directly if flag ```--nodownload``` is set or downloaded to the localdir ```datadir```. The *test* (also referred to as *validation*) data is used logged in Tensorflow event files.
+The training is performed on *train* data, either from the database directly. The *test* (also referred to as *validation*) data is used logged in Tensorflow event files.
 
 ```
 $ python train.py --help
@@ -83,4 +83,4 @@ The generated files ```svm/scores.npy```, ```svm/targets.npy```,  ```svm/predict
 
 ## Earthvision 2017 Evaluation
 
-The (complete, but untidy) evaluation of plots and accuracy metrics can be founds at ```cvprwsevaluation.ipynb``` and ```cvprwsevaluation.ipynb```
+The (complete, but untidy) evaluation of plots and accuracy metrics can be founds at ```cvprwsevaluation.ipynb```
