@@ -65,7 +65,7 @@ python train.py 4 2 0.5 0 30 500 --gpu 1 --model lstm --savedir save --datadir d
 tensorflow checkpoint and eventfiles of this call will be stored at ```save/lstm/4l2r50d0f```
 
 ### Model Evaluation
-The script ```èvaluate.py``` evaluates one model based on *evaluation* data.
+The script ```evaluate.py``` evaluates one model based on *evaluation* data.
 
 ```
 python evaluate.py save/folds/lstm/2l4r50d9f
