@@ -2,8 +2,8 @@ import tensorflow as tf
 import cPickle as pickle
 import rnn_model
 import cnn_model
-from DataLoader import DataLoader
-import psycopg2
+from dataloader import Dataloader
+#import psycopg2
 import os
 import datetime
 import numpy as np
@@ -67,7 +67,7 @@ def train_rnn(model,
         os.makedirs(savedir + "/test")
 
     # save list of classes
-    np.save(os.path.join(savedir, "classes.npy"), train_dataloader.classes)
+    #np.save(os.path.join(savedir, "classes.npy"), train_dataloader.classes)
 
     # dump pickle args for loading
     with open(os.path.join(savedir, "args.pkl"), "wb") as f:
@@ -131,7 +131,7 @@ def train_rnn(model,
 
             # training step
             _, cm = sess.run([model.train_op, model.confusion_matrix], feed_dict=feed)
-            total_cm_train += cm
+            #total_cm_train += cm
 
             e_tr = datetime.datetime.now()
 
@@ -253,7 +253,7 @@ def train_cnn(model,
         os.makedirs(savedir + "/test")
 
     # save list of classes
-    np.save(os.path.join(savedir, "classes.npy"), train_dataloader.classes)
+    #np.save(os.path.join(savedir, "classes.npy"), train_dataloader.classes)
 
     # dump pickle args for loading
     with open(os.path.join(savedir, "args.pkl"), "wb") as f:
@@ -434,8 +434,8 @@ def main():
     args = parser.parse_args()
 
     """ Connection to DB """
-    print os.environ["FIELDDBCONNECTSTRING"]
-    conn = psycopg2.connect(os.environ["FIELDDBCONNECTSTRING"])
+    #print os.environ["FIELDDBCONNECTSTRING"]
+    #conn = psycopg2.connect(os.environ["FIELDDBCONNECTSTRING"])
 
     """ GPU management """
     allow_gpu_mem_growth = True
@@ -488,15 +488,13 @@ def main():
     if args.nodownload:
         test_localdir = train_localdir = None
     else:
-        test_localdir = "{}/test{}".format(args.datadir, args.fold)
-        train_localdir = "{}/train{}".format(args.datadir, args.fold)
+        test_localdir = "data/test".format(args.datadir, args.fold)
+        train_localdir = "data/train".format(args.datadir, args.fold)
 
-    train_dataloader = DataLoader(conn=conn, batch_size=batch_size, sql_where="where is_train{}=True".format(args.fold), debug=False,
-                              do_shuffle=False, do_init_shuffle=True, tablename=tablename, localdir=test_localdir)
-    test_dataloader = DataLoader(conn=conn, batch_size=batch_size, sql_where="where is_train{}=False".format(args.fold), debug=False,
-                             do_shuffle=False, do_init_shuffle=True, tablename=tablename, localdir=train_localdir)
+    test_dataloader = Dataloader(datafolder=test_localdir, batchsize=500)
+    train_dataloader = Dataloader(datafolder=train_localdir, batchsize=500)
 
-    n_classes = train_dataloader.n_classes
+    n_classes = train_dataloader.nclasses
 
     """ select network model """
 

@@ -14,11 +14,6 @@ The TensorFlow graphs for recurrent and convolutional networks are defined at ``
 
 #### Installation
 
-**Please Note**: The data of this project is stored in local PostGIS Database which
-the provided scripts are accessing.
-Hence currently the ```train``` and ```evaluation``` scripts are not executable, due to database restrictions.
-However the training and evalutation will be published shortly.
-
 ##### Requirements
 
 * [Tensorflow == 1.0.1](https://www.tensorflow.org/)
@@ -32,17 +27,17 @@ A complete package list at ```requirements.txt```
 Due to changes in the tf.nn.rnn_cell.MultiRNN class in Tensorflow 1.2.0 the current code is not compatible with TF version 1.2.0
 </div>
 
-##### Clone this repository
+##### Installation
 ```
+# clone this repository
 git clone https://github.com/TUM-LMF/fieldRNN.git
-```
 
-<!--
-download and unzip training data to ```data/```
+# download body of data to execute train.py and evaluate.py (~5 GB)
+sh download_data.sh
+
+# download tf checkpoints and svm baseline to run cvprwsevaluation.ipynb (~50 GB)
+sh download_models.sh
 ```
-wget LoremIpsum
-```
--->
 
 #### Network Training
 The training is performed on *train* data, either from the database directly. The *test* (also referred to as *validation*) data is used logged in Tensorflow event files.
@@ -68,7 +63,7 @@ tensorflow checkpoint and eventfiles of this call will be stored at ```save/lstm
 The script ```evaluate.py``` evaluates one model based on *evaluation* data.
 
 ```
-python evaluate.py save/folds/lstm/2l4r50d9f
+python evaluate.py models/lstm/2l4r50d9f
 ```
 The latest checkpoint of one model is restored and the entire body of *evaluation* data is processed.
 After the evaluation process ```eval_targets.npy```, ```eval_probabilities.npy``` and ```eval_observations.npy``` are stores in the ```save``` directory.
@@ -83,3 +78,21 @@ The generated files ```svm/scores.npy```, ```svm/targets.npy```,  ```svm/predict
 ## Earthvision 2017 Evaluation
 
 The (complete, but untidy) evaluation of plots and accuracy metrics can be founds at ```cvprwsevaluation.ipynb```
+
+## Data
+
+download train and test datasets of the first fold and the evaluation dataset via
+```
+sh download_data.sh
+```
+
+The data is stored as pickle files with dimensions 
+raster data x as [batchsize, observations, features]
+labels y as [batchsize, observations, features]
+
+## Models
+
+Resulting model checkpoints from the grid search can be downloaded (50 GB!) via 
+```
+sh download_models.sh
+```

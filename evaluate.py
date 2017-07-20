@@ -2,8 +2,7 @@ import tensorflow as tf
 import cPickle as pickle
 import rnn_model
 import cnn_model
-from DataLoader import DataLoader
-import psycopg2
+from dataloader import Dataloader
 import os
 import datetime
 import numpy as np
@@ -15,21 +14,9 @@ def main():
 
     parser.add_argument('rundir', type=str, help='directory of tf checkpoint file')
     parser.add_argument('--model', type=str, help="Neural network architecture. 'lstm', 'rnn' or 'cnn' (default lstm)", default='lstm')
-    parser.add_argument('--tablename', type=str, help="Database batch table name (default raster_label_fields)", default='raster_label_fields')
-    parser.add_argument('--sqlwhere', type=str, help="SQL to select which POIs to load (default: where is_evaluate=True)", default='where is_evaluate=True')
-    parser.add_argument('--batchsize', type=int, help="batchsize (500)", default=500)
     parser.add_argument('--gpu', type=int, help="Select gpu (e.g. 0), via environment variable CUDA_VISIBLE_DEVICES (default None)", default=None)
 
     args = parser.parse_args()
-
-    """ DEBUG """
-    #args.rundir = "save/tmp/lstm/4l4r50d1f"
-    #args.tablename = "raster_label_fields"
-    #args.sqlwhere = "where is_validate=True"
-
-    """ Connection to DB """
-    print os.environ["FIELDDBCONNECTSTRING"]
-    conn = psycopg2.connect(os.environ["FIELDDBCONNECTSTRING"])
 
     """ GPU management """
     allow_gpu_mem_growth = True
@@ -40,9 +27,10 @@ def main():
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
         os.environ["CUDA_VISIBLE_DEVICES"] = gpu_id
 
-    dataloader = DataLoader(conn=conn, batch_size=args.batchsize, sql_where=args.sqlwhere,
-                            debug=False,
-                            do_shuffle=False, do_init_shuffle=True, tablename=args.tablename)
+    dataloader = Dataloader(datafolder="data/eval", batchsize=500)
+    #dataloader = Dataloader(conn=conn, batch_size=args.batchsize, sql_where=args.sqlwhere,
+    #                        debug=False,
+    #                        do_shuffle=False, do_init_shuffle=True, tablename=args.tablename)
 
     """
     Load
@@ -61,7 +49,7 @@ def main():
     print("building model graph")
 
     if args.model in ["rnn","lstm"]:
-        model = rnn_model.Model(n_input=modelargs["n_input"], n_classes=modelargs["n_classes"], n_layers=modelargs["n_layers"], batch_size=args.batchsize,
+        model = rnn_model.Model(n_input=modelargs["n_input"], n_classes=modelargs["n_classes"], n_layers=modelargs["n_layers"], batch_size=dataloader.batchsize,
                                 adam_lr=modelargs["adam_lr"],rnn_cell_type=args.model , dropout_keep_prob=modelargs["dropout_keep_prob"], n_cell_per_input=modelargs["n_cell_per_input"], gpu=0)
         evaluate=evaluate_rnn
 
@@ -149,7 +137,7 @@ def evaluate_rnn(model,
             all_obs = np.append(all_obs, obs)
             all_scores = np.append(all_scores, scores)
             all_targets = np.append(all_targets, targets)
-            total_cm += cm
+            #total_cm += cm
 
             e_tr = datetime.datetime.now()
 

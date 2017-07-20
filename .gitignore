@@ -4,6 +4,8 @@
 
 tikz
 
+models
+
 run_experiments2.sh
 
 run*.sh
@@ -13,9 +15,13 @@ createRunScripts.py
 
 doc/vpfpresentation/complex.*
 
+download_data.py
+
 run_*
 
 *old
+
+DataLoader.py
 
 link_save_dir.sh
 
