@@ -410,10 +410,8 @@ def main():
     parser.add_argument('fold', type=int, help='select training/evaluation fold to use')
 
     parser.add_argument('maxepoch', type=int, help="maximum epochs")
-    parser.add_argument('batchsize', type=int, help="batchsize")
 
     parser.add_argument('--savedir', type=str, default="save/tmp", help='directory to save the run')
-    #parser.add_argument('--batchsize', type=int, default=500, help="batchsize")
     parser.add_argument('--gpu', '-g', type=str, default=None, help='visible gpu')
 
     parser.add_argument('--model', type=str, help="Neural network architecture. 'lstm', 'rnn' or 'cnn'", default='lstm')
@@ -423,13 +421,6 @@ def main():
 
     parser.add_argument('--summary_every', '-s', type=int ,default=20, help='save summary every n iterations')
     parser.add_argument('--log_every', '-l', type=int, default=20, help='log every l iterations')
-
-    parser.add_argument('--log',action='store_true', help='write to logfile instead of stdout')
-    parser.add_argument('--err',action='store_true', help='write to errfile instead of stderr')
-
-    parser.add_argument('--nodownload', action='store_true', help='write files to local downloadir data/<train-test><fold>/')
-
-    parser.add_argument('--datadir', default="data", help='directory to for local data default data/<train-test><fold>/. Will be ignored if nodownload flag is set')
 
     args = parser.parse_args()
 
@@ -457,18 +448,12 @@ def main():
     """ redirect stdout stderr """
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    if args.log:
-        sys.stdout = open(os.path.join(save_dir,"stdout.log"), 'w')
-    if args.err:
-        sys.stderr = open(os.path.join(save_dir,"stderr.log"), 'w')
-
 
     """ summary logging """
     summary_every = args.summary_every
     print_every = args.log_every
 
     max_epoch = args.maxepoch
-    batch_size = args.batchsize
     keep_prob = args.dropout
     n_layers = args.layers
     n_cell_per_input = args.cells
@@ -485,11 +470,8 @@ def main():
 
     tablename = "raster_label_fields"
 
-    if args.nodownload:
-        test_localdir = train_localdir = None
-    else:
-        test_localdir = "data/test".format(args.datadir, args.fold)
-        train_localdir = "data/train".format(args.datadir, args.fold)
+    test_localdir = "data/test"
+    train_localdir = "data/train"
 
     test_dataloader = Dataloader(datafolder=test_localdir, batchsize=500)
     train_dataloader = Dataloader(datafolder=train_localdir, batchsize=500)
@@ -500,7 +482,7 @@ def main():
 
     print("building model graph on device {}".format(gpu_id))
     if args.model in ["lstm","rnn"]:
-        model = rnn_model.Model(n_input=n_input, n_classes=n_classes, n_layers=n_layers, batch_size=batch_size,
+        model = rnn_model.Model(n_input=n_input, n_classes=n_classes, n_layers=n_layers, batch_size=train_dataloader.batchsize,
                                 adam_lr=1e-3, dropout_keep_prob=keep_prob, n_cell_per_input=n_cell_per_input, gpu=gpu_id,
                                 rnn_cell_type=args.model)
         train = train_rnn

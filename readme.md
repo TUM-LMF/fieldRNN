@@ -24,13 +24,14 @@ The TensorFlow graphs for recurrent and convolutional networks are defined at ``
 A complete package list at ```requirements.txt```
 
 <div class="alert alert-warning">
-Due to changes in the tf.nn.rnn_cell.MultiRNN class in Tensorflow 1.2.0 the current code is not compatible with TF version 1.2.0
+**Please Note** Due to changes in the tf.nn.rnn_cell.MultiRNN class in Tensorflow 1.2.0 the current code is not compatible with TF version 1.2.0
 </div>
 
 ##### Installation
 ```
 # clone this repository
 git clone https://github.com/TUM-LMF/fieldRNN.git
+cd fieldRNN
 
 # download body of data to execute train.py and evaluate.py (~5 GB)
 sh download_data.sh
@@ -44,18 +45,18 @@ The training is performed on *train* data, either from the database directly. Th
 
 ```
 $ python train.py --help
-> positional arguments:
-> layers                number of layers
-> cells                 number of rnn cells, as multiple of 55
-> dropout               dropout keep probability
-> fold                  select training/evaluation fold to use
-> maxepoch              maximum epochs
-> batchsize             batchsize
+positional arguments:
+  layers                number of layers
+  cells                 number of rnn cells, as multiple of 55
+  dropout               dropout keep probability
+  fold                  select training/evaluation fold to use
+  maxepoch              maximum epochs
+
 ```
 
 For instance:
 ```
-python train.py 4 2 0.5 0 30 500 --gpu 1 --model lstm --savedir save --datadir data;
+python train.py 4 2 0.5 0 30 --gpu 0 --model lstm --savedir save
 ```
 tensorflow checkpoint and eventfiles of this call will be stored at ```save/lstm/4l2r50d0f```
 
@@ -96,3 +97,7 @@ Resulting model checkpoints from the grid search can be downloaded (50 GB!) via
 ```
 sh download_models.sh
 ```
+
+##### run naming scheme
+```4l5r50d5f``` represents 4 layers, x5 rnn_cells, 50% dropout keep probability, and fold 5
+
