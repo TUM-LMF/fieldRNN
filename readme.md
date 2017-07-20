@@ -23,9 +23,7 @@ The TensorFlow graphs for recurrent and convolutional networks are defined at ``
 
 A complete package list at ```requirements.txt```
 
-<div class="alert alert-warning">
-**Please Note** Due to changes in the tf.nn.rnn_cell.MultiRNN class in Tensorflow 1.2.0 the current code is not compatible with TF version 1.2.0
-</div>
+**Please Note**: Due to changes in the tf.nn.rnn_cell.MultiRNN class in Tensorflow 1.2.0 the current code is not compatible with TF version 1.2.0
 
 ##### Installation
 ```
@@ -86,18 +84,20 @@ download train and test datasets of the first fold and the evaluation dataset vi
 ```
 sh download_data.sh
 ```
+```data``` required for ```train.py``` and ```evaluate.py```
 
 The data is stored as pickle files with dimensions 
 raster data x as [batchsize, observations, features]
 labels y as [batchsize, observations, features]
 
 ## Models
+```models``` required for ```cvprwsevaluation.ipynb```
 
 Resulting model checkpoints from the grid search can be downloaded (50 GB!) via 
 ```
 sh download_models.sh
 ```
 
-##### run naming scheme
+##### naming scheme
 ```4l5r50d5f``` represents 4 layers, x5 rnn_cells, 50% dropout keep probability, and fold 5
 
