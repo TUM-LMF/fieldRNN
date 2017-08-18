@@ -1,7 +1,9 @@
 #!/bin/sh
 
-mkdir data
-cd data
-wget ftp://ftp.lrz.de/transfer/fieldRNN/dataset.zip
-unzip dataset.zip
-rm dataset.zip
+wget ftp://m1370728:m1370728@138.246.224.34/data.zip
+unzip data.zip
+rm data.zip
+
+# test for completeness
+wget ftp://m1370728:m1370728@138.246.224.34/data.sha512
+sha512sum -c data.sha512

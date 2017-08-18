@@ -38,6 +38,8 @@ sh download_data.sh
 sh download_models.sh
 ```
 
+The data is hosted at [mediaTUM](https://mediatum.ub.tum.de/1370728).
+
 #### Network Training
 The training is performed on *train* data, either from the database directly. The *test* (also referred to as *validation*) data is used logged in Tensorflow event files.
 
